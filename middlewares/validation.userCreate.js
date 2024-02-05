@@ -10,4 +10,12 @@ const createUserValidation = celebrate({
     }),
   });
 
-module.exports = createUserValidation;
+const loginUserValidation = celebrate({
+    body: Joi.object().keys({
+      password: Joi.string().required().min(8),
+      email: Joi.string().required().email(),
+    }),
+  });
+
+
+module.exports = {createUserValidation, loginUserValidation};
