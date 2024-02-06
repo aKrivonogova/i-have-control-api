@@ -22,7 +22,10 @@ const createUserHandler =  async (req, res, next) => {
         } 
         if(error.code === 11000) {
             return next(new DuplicateError('Пользователь с таким email уже существует'));
-        };
+        }
+        else {
+            console.log(req)
+        }
     }
 }
 
@@ -42,4 +45,18 @@ const loginUserHandler = async (req, res, next) => {
     }
 }
 
-module.exports = { createUserHandler, loginUserHandler}; 
+const getCurrentUser =  (req, res, next) => {
+    User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Пользователь не найден');
+      }
+      res.status(200).send(user);
+    })
+    .catch((err) => {
+      next(err);
+    });
+}
+
+
+module.exports = { createUserHandler, loginUserHandler, getCurrentUser}; 
